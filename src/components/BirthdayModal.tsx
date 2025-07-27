@@ -32,7 +32,6 @@ const BirthdayModal = ({ isOpen, onClose }: BirthdayModalProps) => {
       }}
       initial={{ y: -100, opacity: 0, rotate: 0 }}
       animate={{
-        y: window.innerHeight + 100,
         opacity: [0, 1, 1, 0],
         rotate: 720,
         x: Math.sin(i) * 100
@@ -201,13 +200,13 @@ const BirthdayModal = ({ isOpen, onClose }: BirthdayModalProps) => {
                 transition={{ delay: 1, duration: 0.8 }}
               >
                 <p className="text-xl text-pink-700 font-semibold">
-                  🌟 Welcome to adulthood, beautiful! 🌟
+                  🌟 Happy Birthday, beautiful! 🌟
                 </p>
                 <p className="text-pink-600 text-lg">
-                  You're officially 18 and ready to conquer the world! ✨
+                  You're officially 18 and now consdered a pedofile!!! ✨
                 </p>
                 <p className="text-gray-600">
-                  This day is all about celebrating YOU and the amazing person you are! 💕
+                  I hope you will have the best day today. Go queen, lol! 💕
                 </p>
               </motion.div>
 

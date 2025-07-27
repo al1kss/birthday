@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { Play, Heart, Gift, Sparkles, Star } from 'lucide-react'
 import BirthdayModal from '@/components/BirthdayModal'
@@ -41,6 +41,30 @@ export default function HomePage() {
   const typingWords = ["Happy Birthday Gaia", "You're 18 Now!", "My Beautiful Girl", "I Love You ❤️"]
   const typedText = useTypingEffect(typingWords, 100, 2500)
 
+  // Pre-generate stable heart positions and properties using useMemo
+  const heartConfigs = useMemo(() => {
+    return Array.from({ length: 20 }, (_, i) => ({
+      id: i,
+      left: Math.random() * 100,
+      top: Math.random() * 100,
+      fontSize: Math.random() * 30 + 20,
+      duration: Math.random() * 10 + 15,
+      delay: Math.random() * 5,
+    }))
+  }, []) // Empty dependency array ensures this only runs once
+
+  // Pre-generate stable sparkle configurations
+  const sparkleConfigs = useMemo(() => {
+    return Array.from({ length: 30 }, (_, i) => ({
+      id: i,
+      left: Math.random() * 100,
+      top: Math.random() * 100,
+      fontSize: Math.random() * 15 + 10,
+      duration: Math.random() * 3 + 2,
+      delay: Math.random() * 2,
+    }))
+  }, []) // Empty dependency array ensures this only runs once
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowModal(true)
@@ -61,40 +85,40 @@ export default function HomePage() {
     }}>
       {/* Floating Hearts Background */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
-        {Array.from({ length: 20 }, (_, i) => (
+        {heartConfigs.map((heart) => (
           <motion.div
-            key={i}
+            key={heart.id}
             className="absolute text-pink-400 opacity-20"
             style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              fontSize: `${Math.random() * 30 + 20}px`,
+              left: `${heart.left}%`,
+              top: `${heart.top}%`,
+              fontSize: `${heart.fontSize}px`,
             }}
             animate={{
               y: [0, -50, 0],
-              x: [0, Math.sin(i) * 30, 0],
+              x: [0, Math.sin(heart.id) * 30, 0],
               rotate: [0, 360],
               scale: [1, 1.5, 1],
             }}
             transition={{
-              duration: Math.random() * 10 + 15,
+              duration: heart.duration,
               repeat: Infinity,
               ease: "easeInOut",
-              delay: Math.random() * 5,
+              delay: heart.delay,
             }}
           >
             💖
           </motion.div>
         ))}
 
-        {Array.from({ length: 30 }, (_, i) => (
+        {sparkleConfigs.map((sparkle) => (
           <motion.div
-            key={`sparkle-${i}`}
+            key={`sparkle-${sparkle.id}`}
             className="absolute text-purple-400 opacity-40"
             style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              fontSize: `${Math.random() * 15 + 10}px`,
+              left: `${sparkle.left}%`,
+              top: `${sparkle.top}%`,
+              fontSize: `${sparkle.fontSize}px`,
             }}
             animate={{
               opacity: [0, 1, 0],
@@ -102,10 +126,10 @@ export default function HomePage() {
               rotate: [0, 180, 360],
             }}
             transition={{
-              duration: Math.random() * 4 + 3,
+              duration: sparkle.duration,
               repeat: Infinity,
               ease: "easeInOut",
-              delay: Math.random() * 8,
+              delay: sparkle.delay,
             }}
           >
             ✨
@@ -113,62 +137,11 @@ export default function HomePage() {
         ))}
       </div>
 
-      {/* Animated Background Blobs */}
-      <div className="absolute inset-0">
-        <motion.div
-          className="absolute top-20 left-20 w-80 h-80 bg-pink-300/20 rounded-full blur-3xl"
-          animate={{
-            scale: [1, 1.3, 1],
-            opacity: [0.2, 0.4, 0.2],
-            x: [0, 50, 0],
-            y: [0, -30, 0],
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-        <motion.div
-          className="absolute bottom-20 right-20 w-96 h-96 bg-purple-300/20 rounded-full blur-3xl"
-          animate={{
-            scale: [1.2, 1, 1.2],
-            opacity: [0.3, 0.6, 0.3],
-            x: [0, -40, 0],
-            y: [0, 20, 0],
-          }}
-          transition={{
-            duration: 10,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 2,
-          }}
-        />
-        <motion.div
-          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-pink-400/15 rounded-full blur-2xl"
-          animate={{
-            scale: [1, 1.4, 1],
-            opacity: [0.15, 0.3, 0.15],
-            rotate: [0, 180, 360],
-          }}
-          transition={{
-            duration: 12,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 4,
-          }}
-        />
-      </div>
 
       {/* Main Content */}
-      <div className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 text-center">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-          className="mb-8"
-        >
+      <div className="relative z-10 flex items-center justify-center min-h-screen px-6">
+        <div className="text-center max-w-6xl mx-auto">
+          {/* Birthday Badge */}
           <motion.div
             className="flex items-center justify-center space-x-4 mb-6"
             animate={{ scale: [1, 1.05, 1] }}
@@ -178,7 +151,6 @@ export default function HomePage() {
             <h2 className="text-2xl font-bold text-pink-600">Special Birthday Girl</h2>
             <Star className="text-pink-500 w-8 h-8" />
           </motion.div>
-        </motion.div>
 
         {/* Main Title with Typing Effect */}
         <motion.div
@@ -219,9 +191,8 @@ export default function HomePage() {
           animate={{ opacity: 1 }}
           transition={{ delay: 1.5, duration: 1 }}
         >
-          🎉 Today you turn 18, and I couldn't be more excited to celebrate the incredible person you are!
-          You bring so much joy, laughter, and love into my life every single day.
-          Here's to new adventures, dreams coming true, and endless happiness! 💕
+          🎉 Today you are officialy 18! And I can't wait till we get to celebrate this day together.
+          You bring so much joy, laughter, and love into my life every single day, Gajusiu. Love you incredibly, please watch the birthday video. I hope you will love it as much as I do! 💖
         </motion.p>
 
         {/* Video Section */}
@@ -232,69 +203,41 @@ export default function HomePage() {
           transition={{ delay: 2, duration: 1 }}
         >
           {!showVideo ? (
-            <motion.div
-              className="bg-gradient-to-br from-pink-100 to-purple-100 rounded-3xl p-12 backdrop-blur-sm border-2 border-pink-300 shadow-2xl"
-              whileHover={{ scale: 1.02, y: -5 }}
-              transition={{ duration: 0.3 }}
-            >
-              <motion.div
-                className="w-32 h-32 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-8 shadow-lg pulse-pink"
-                whileHover={{ scale: 1.1, rotate: 5 }}
-                animate={{
-                  boxShadow: [
-                    '0 0 30px rgba(236, 72, 153, 0.4)',
-                    '0 0 60px rgba(236, 72, 153, 0.8)',
-                    '0 0 30px rgba(236, 72, 153, 0.4)'
-                  ]
-                }}
-                transition={{
-                  boxShadow: { duration: 2, repeat: Infinity }
-                }}
-              >
-                <Play className="w-16 h-16 text-white ml-2" />
-              </motion.div>
-
-              <h3 className="text-3xl font-bold text-pink-700 mb-4">
-                🎁 Your Special Birthday Video!
-              </h3>
-              <p className="text-gray-600 mb-8 text-lg">
-                I made something extra special just for you, my love 💖
-              </p>
-
+            <div className="relative group">
               <motion.button
                 onClick={handlePlayVideo}
-                className="bg-gradient-to-r from-pink-500 via-purple-500 to-pink-500 text-white font-bold py-4 px-10 rounded-full text-xl shadow-xl hover:shadow-2xl transition-all duration-300"
+                className="relative bg-gradient-to-r from-pink-500 to-purple-600 text-white px-12 py-6 rounded-2xl font-bold text-xl shadow-2xl overflow-hidden group-hover:shadow-pink-500/50 transition-all duration-300"
                 whileHover={{
                   scale: 1.05,
-                  boxShadow: '0 0 40px rgba(236, 72, 153, 0.6)'
+                  boxShadow: "0 25px 50px -12px rgba(236, 72, 153, 0.5)"
                 }}
-                whileTap={{ scale: 0.95 }}
-                animate={{
-                  backgroundPosition: ['0%', '100%', '0%'],
-                }}
-                style={{ backgroundSize: '200% 200%' }}
-                transition={{
-                  backgroundPosition: { duration: 3, repeat: Infinity }
-                }}
+                whileTap={{ scale: 0.98 }}
               >
-                <span className="flex items-center gap-3">
-                  💕 Play My Message 💕
-                  <Heart className="w-6 h-6 heartbeat" />
+                <span className="relative z-10 flex items-center space-x-3">
+                  <Play className="w-8 h-8 fill-current" />
+                  <span>Watch Your Special Video</span>
                 </span>
+
+                <motion.div
+                  className="absolute inset-0 bg-gradient-to-r from-purple-600 to-pink-500"
+                  initial={{ x: "-100%" }}
+                  whileHover={{ x: "0%" }}
+                  transition={{ duration: 0.5 }}
+                />
               </motion.button>
-            </motion.div>
+            </div>
           ) : (
             <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
+              className="relative rounded-2xl overflow-hidden shadow-2xl"
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.5 }}
-              className="rounded-3xl overflow-hidden shadow-2xl border-4 border-pink-300"
             >
               <video
                 ref={videoRef}
-                className="w-full h-auto"
                 controls
-                poster="/video-thumbnail.jpg"
+                className="w-full h-auto rounded-2xl"
+                poster="/birthday-poster.jpg"
               >
                 <source src="/birthday-video.mp4" type="video/mp4" />
                 Your browser does not support the video tag.
@@ -305,39 +248,32 @@ export default function HomePage() {
 
         {/* Action Buttons */}
         <motion.div
-          className="flex flex-col sm:flex-row gap-6 mb-12"
-          initial={{ opacity: 0, y: 30 }}
+          className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6"
+          initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 2.5, duration: 1 }}
         >
           <motion.button
             onClick={() => setShowModal(true)}
-            className="bg-gradient-to-r from-pink-500 to-purple-600 text-white font-bold py-4 px-8 rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
+            className="group relative bg-gradient-to-r from-pink-500 to-rose-500 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-xl overflow-hidden"
             whileHover={{
               scale: 1.05,
-              boxShadow: '0 0 30px rgba(236, 72, 153, 0.5)'
+              boxShadow: "0 20px 40px -12px rgba(236, 72, 153, 0.4)"
             }}
-            whileTap={{ scale: 0.95 }}
+            whileTap={{ scale: 0.98 }}
           >
-            <span className="flex items-center gap-2">
-              🎉 Celebrate Again!
-              <Gift className="w-5 h-5" />
+            <span className="relative z-10 flex items-center space-x-2">
+              <Gift className="w-6 h-6" />
+              <span>Open Birthday Surprise</span>
             </span>
-          </motion.button>
-        </motion.div>
 
-        {/* Footer Message */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 3, duration: 1 }}
-          className="text-center"
-        >
-          <div className="flex items-center justify-center gap-2 text-pink-600 text-lg">
-            <Sparkles className="w-5 h-5 sparkle" />
-            <span className="font-medium">Made with endless love for Gaia Wolski</span>
-            <Sparkles className="w-5 h-5 sparkle" style={{ animationDelay: '0.5s' }} />
-          </div>
+            <motion.div
+              className="absolute inset-0 bg-gradient-to-r from-rose-500 to-pink-500"
+              initial={{ x: "-100%" }}
+              whileHover={{ x: "0%" }}
+              transition={{ duration: 0.5 }}
+            />
+          </motion.button>
         </motion.div>
       </div>
 
@@ -346,6 +282,35 @@ export default function HomePage() {
         isOpen={showModal}
         onClose={() => setShowModal(false)}
       />
+
+      {/* Sparkle Effects */}
+      <div className="fixed inset-0 pointer-events-none">
+        {Array.from({ length: 5 }, (_, i) => (
+          <motion.div
+            key={`floating-sparkle-${i}`}
+            className="absolute text-yellow-400 text-4xl"
+            style={{
+              left: `${20 + i * 15}%`,
+              top: `${30 + i * 10}%`,
+            }}
+            animate={{
+              y: [0, -30, 0],
+              rotate: [0, 360],
+              scale: [1, 1.2, 1],
+              opacity: [0.3, 0.8, 0.3],
+            }}
+            transition={{
+              duration: 4 + i,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: i * 0.5,
+            }}
+          >
+            ✨
+          </motion.div>
+        ))}
+      </div>
+      </div>
     </div>
   )
 }
