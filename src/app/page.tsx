@@ -233,23 +233,20 @@ export default function HomePage() {
               animate={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.5 }}
             >
-              <video
-                ref={videoRef}
-                controls
-                className="w-full h-auto rounded-2xl"
-                poster="/birthday-poster.jpg"
-              >
-                <source src="https://drive.google.com/uc?export=preview&id=1oPci0Wskr3-yUEaKUmgIprU3o2L_XGRy"
-                        type="video/mp4"/>
-                Your browser does not support the video tag.
-              </video>
+              <iframe
+                  src="https://drive.google.com/file/d/1oPci0Wskr3-yUEaKUmgIprU3o2L_XGRy/preview"
+                  width="100%"
+                  height="480"
+                  allow="autoplay"
+                  className="rounded-2xl shadow-2xl"
+              />
             </motion.div>
           )}
         </motion.div>
 
           {/* Action Buttons */}
           <motion.div
-          className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6"
+              className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 2.5, duration: 1 }}
