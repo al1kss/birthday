@@ -239,15 +239,16 @@ export default function HomePage() {
                 className="w-full h-auto rounded-2xl"
                 poster="/birthday-poster.jpg"
               >
-                <source src="/birthday-video.mp4" type="video/mp4" />
+                <source src="https://drive.google.com/uc?export=preview&id=1oPci0Wskr3-yUEaKUmgIprU3o2L_XGRy"
+                        type="video/mp4"/>
                 Your browser does not support the video tag.
               </video>
             </motion.div>
           )}
         </motion.div>
 
-        {/* Action Buttons */}
-        <motion.div
+          {/* Action Buttons */}
+          <motion.div
           className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
